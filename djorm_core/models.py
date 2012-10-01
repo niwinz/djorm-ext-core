@@ -22,15 +22,15 @@ class ConnectionCreateHandler(object):
     def __call__(self, sender, connection, **kwargs):
         handlers = set()
         if None in self.unique_handlers:
-            handlers.extend(self.unique_handlers[None])
+            handlers.update(self.unique_handlers[None])
             del self.unique_handlers[None]
 
         if connection.vendor in self.unique_handlers:
-            handlers.extend(self.unique_handlers[connection.vendor])
+            handlers.update(self.unique_handlers[connection.vendor])
             del self.unique_handlers[connection.vendor]
 
         if connection.vendor in self.generic_handlers:
-            handlers.extend(self.generic_handlers[connection.vendor])
+            handlers.update(self.generic_handlers[connection.vendor])
 
         [x(connection) for x in handlers]
 

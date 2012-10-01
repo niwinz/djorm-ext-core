@@ -6,8 +6,8 @@ Core module of django orm extensions package. Is a collection of third party plu
 
 setup(
     name = "djorm-ext-core",
-    version = ':versiontools:djorm_core:',
-    url = 'https://github.com/niwibe/django-orm-extensions',
+    version = '0.4.0',
+    url = 'https://github.com/niwibe/djorm-ext-core',
     license = 'BSD',
     platforms = ['OS Independent'],
     description = description.strip(),
@@ -18,9 +18,6 @@ setup(
     packages = find_packages(),
     include_package_data = False,
     install_requires = [],
-    setup_requires = [
-        'versiontools >= 1.9',
-    ],
     zip_safe = False,
     classifiers = [
         'Development Status :: 4 - Beta',
