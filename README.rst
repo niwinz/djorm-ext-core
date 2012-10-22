@@ -17,6 +17,6 @@ This is a simple example of usage:
 
     from djorm_core.postgresql import server_side_cursors
 
-    with server_side_cursors(qs, itersize=100):
+    with server_side_cursors():
         for item in Model.objects.all():
             print item.value

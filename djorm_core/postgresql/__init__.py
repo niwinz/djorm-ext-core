@@ -58,6 +58,9 @@ def patch_cursor_wrapper():
                                 str(uuid.uuid4()).replace("-", "")))
             self.cursor.tzinfo_factory = cursor.tzinfo_factory
 
+            if _local_data.itersize:
+                self.cursor.itersize = _local_data.itersize
+
     base.CursorWrapper = CursorWrapper
 
 
