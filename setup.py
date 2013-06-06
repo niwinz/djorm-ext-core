@@ -6,7 +6,7 @@ Core module of django orm extensions package. Is a collection of third party plu
 
 setup(
     name = "djorm-ext-core",
-    version = '0.4.1',
+    version = '0.4.2',
     url = 'https://github.com/niwibe/djorm-ext-core',
     license = 'BSD',
     platforms = ['OS Independent'],
@@ -26,6 +26,11 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.3",
         'Topic :: Internet :: WWW/HTTP',
     ]
 )

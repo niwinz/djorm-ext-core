@@ -3,18 +3,17 @@
 from django.db.models import signals
 from django.db.backends import signals as backend_signals
 from django.conf import settings
-from django.utils.importlib import import_module
+from django.utils import six
+
 from .utils import Singleton
 
 
-class ConnectionCreateHandler(object):
+class ConnectionCreateHandler(six.with_metaclass(Singleton)):
     """
     Generic connection handlers manager.
     Executes attrached funcitions on connection is created.
     With facilty of attaching single execution methods.
     """
-
-    __metaclass__ = Singleton
 
     generic_handlers = {}
     unique_handlers = {}
