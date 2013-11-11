@@ -19,7 +19,7 @@ _local_data = threading.local()
 
 class server_side_cursors(object):
     def __init__(self, itersize=None):
-        self.itersize = None
+        self.itersize = itersize
 
     def __enter__(self):
         self.old_itersize = getattr(_local_data, 'itersize', None)
