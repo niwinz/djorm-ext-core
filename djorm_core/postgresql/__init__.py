@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import threading
+import uuid
 import sys
+
+from django.conf import settings
+import django
 
 try:
     import psycopg2
@@ -9,9 +14,6 @@ except ImportError:
           "is only compatible with postgresql_psycopg2 backend")
     sys.exit(-1)
 
-
-import threading
-import uuid
 
 
 _local_data = threading.local()
@@ -32,7 +34,7 @@ class server_side_cursors(object):
         _local_data.server_side_cursors = self.old_cursors
 
 
-def patch_cursor_wrapper():
+def patch_cursor_wrapper_django_lt_1_6():
     from django.db.backends.postgresql_psycopg2 import base
 
     if hasattr(base, "_CursorWrapper"):
@@ -60,4 +62,27 @@ def patch_cursor_wrapper():
     base.CursorWrapper = CursorWrapper
 
 
-patch_cursor_wrapper()
+def patch_cursor_wrapper_django_gte_1_6():
+    from django.db.backends.postgresql_psycopg2 import base
+    if hasattr(base, "_ssc_patched"):
+        return
+
+    base._ssc_patched = True
+
+    old_create_cursor = base.DatabaseWrapper.create_cursor
+    def new_create_cursor(self):
+        if getattr(_local_data, 'server_side_cursors', False):
+            name = uuid.uuid4().hex
+            cursor = self.connection.cursor(name="cur{0}".format(name))
+            cursor.tzinfo_factory = base.utc_tzinfo_factory if settings.USE_TZ else None
+            return cursor
+
+        return old_create_cursor(self)
+
+    base.DatabaseWrapper.create_cursor = new_create_cursor
+
+
+if django.VERSION[:2] < (1, 6):
+    patch_cursor_wrapper_django_lt_1_6()
+else:
+    patch_cursor_wrapper_django_gte_1_6()
