@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 0.7
+-----------
+
+- Port improvements from 0.6 version for django 1.6 and python3.
+
 Version 0.6
 -----------
 
