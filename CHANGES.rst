@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 0.6
+-----------
+
+- Add some parameters to server side cursors decorator.
+- Bugfixes.
+
+
 Version 0.5
 -----------
 
