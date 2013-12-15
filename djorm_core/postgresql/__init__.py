@@ -102,13 +102,22 @@ def patch_cursor_wrapper_django_gte_1_6():
 
     old_create_cursor = base.DatabaseWrapper.create_cursor
     def new_create_cursor(self):
-        if getattr(_local_data, 'server_side_cursors', False):
-            name = uuid.uuid4().hex
-            cursor = self.connection.cursor(name="cur{0}".format(name))
-            cursor.tzinfo_factory = base.utc_tzinfo_factory if settings.USE_TZ else None
-            return cursor
+        if not getattr(_local_data, 'server_side_cursors', False):
+            return old_create_cursor(self)
 
-        return old_create_cursor(self)
+        name = uuid.uuid4().hex
+        cursor = self.connection.cursor(name="cur{0}".format(name),
+                                        withhold=getattr(_local_data, 'withhold', False))
+        cursor.tzinfo_factory = base.utc_tzinfo_factory if settings.USE_TZ else None
+
+        if getattr(_local_data, 'itersize', None):
+            cursor.itersize = _local_data.itersize
+
+        if getattr(_local_data, 'once', False):
+            _local_data.server_side_cursors = False
+            _local_data.once = False
+
+        return cursor
 
     base.DatabaseWrapper.create_cursor = new_create_cursor
 
